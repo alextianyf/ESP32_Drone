@@ -1,6 +1,7 @@
 #include <Arduino.h>
 #include <IBusBM.h>
 #include <ESP32Servo.h>
+#include <FSI6AB.h>
 // IBusBM ibus;
 
 // int potValue;
@@ -50,10 +51,12 @@
 
 void setup() {
   Serial.begin(115200);
+  IBus_Init();
 }
 
 void loop() {
-  Serial.println("test");
-  delay(1000) ;
+  
+  readJoystick();
+  delay(10);
 }
 
