@@ -1,14 +1,15 @@
 #include <Arduino.h>
-#include <ESP32Servo.h>
 #include <FSI6AB.h>
+#include "Motor.h"
 
 void setup() {
   Serial.begin(115200);
   Receiver_Init();
-  delay(3000);
+  Motor_Init();
 }
 
 void loop() {
   Read_RC_Values();
+  Motor_Start();
 }
 
