@@ -1,9 +1,9 @@
 #include <Arduino.h>
 #define RC_NUM_CHANNELS 4
-#define RC_CH1 0
-#define RC_CH2 1
-#define RC_CH3 2//throttle
-#define RC_CH4 3
+#define RC_CH1 0// roll
+#define RC_CH2 1// pitch
+#define RC_CH3 2// throttle
+#define RC_CH4 3// yaw
 
 #define RC_CH1_PIN 33
 #define RC_CH2_PIN 32
