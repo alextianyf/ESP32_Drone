@@ -7,6 +7,8 @@ Adafruit_MPU6050 mpu;
 sensors_event_t acc, gcc, temp;
 int16_t AcX, AcY, AcZ, Tmp, GyX, GyY, GyZ;
 
+//#define GYRO_DEBUG 1
+
 void gyro_init(){
     if(!mpu.begin()){
         Serial.print("Gyro init failed");
@@ -25,6 +27,8 @@ void readGyro_signals(){
     AcY = acc.acceleration.y;
     AcZ = acc.acceleration.z;
     Tmp = temp.temperature;
+
+    #ifdef GYRO_DEBUG
     Serial.print("Roll degree = "); Serial.print(GyX);
     Serial.print("; Pitch degree = "); Serial.print(GyY); 
     Serial.print("; Yaw degree = "); Serial.print(GyZ);
@@ -32,4 +36,5 @@ void readGyro_signals(){
     Serial.print("; Y-acc = "); Serial.print(AcY);
     Serial.print("; Z-acc = "); Serial.print(AcZ);
     Serial.print("; Temperature = "); Serial.println(GyZ);
+    #endif
 }
