@@ -5,10 +5,10 @@
 #define RC_CH3 2// throttle
 #define RC_CH4 3// yaw
 
-#define RC_CH1_PIN 33
-#define RC_CH2_PIN 32
-#define RC_CH3_PIN 35
-#define RC_CH4_PIN 34
+#define RC_CH1_PIN 33//Connect with CH1
+#define RC_CH2_PIN 32//Connect with CH2
+#define RC_CH3_PIN 35//Connect with CH3
+#define RC_CH4_PIN 34//Connect with CH4
 
 #define RC_LIMIT_MAX 2000
 #define RC_LIMIT_MIN 1000
