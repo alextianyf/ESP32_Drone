@@ -3,6 +3,6 @@
 
 void Receiver_Init();
 void Read_RC_Values();
-extern uint16_t RC_VALUES[];
+extern int16_t inputRoll, inputPitch, inputThrottle, inputYaw;
 
 #endif 

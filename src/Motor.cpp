@@ -1,6 +1,7 @@
 #include <Arduino.h>
 #include <ESP32Servo.h>
 #include <FSI6AB.h>
+#include "MPU6050.h"
 
 Servo Motor1;//top left
 Servo Motor2;//top right
@@ -19,10 +20,11 @@ void Motor_Init(){
 }
 
 void Motor_Start(){
-    int ThrottleValue = RC_VALUES[2];
-    ThrottleValue = map(ThrottleValue,1050,2000,0,180);
-    Motor1.write(ThrottleValue);
-    Motor2.write(ThrottleValue);
-    Motor3.write(ThrottleValue);
-    Motor4.write(ThrottleValue);
+    // int ThrottleValue = RC_VALUES[2];
+    // ThrottleValue = map(ThrottleValue,1050,2000,0,180);
+    // Motor1.write(ThrottleValue);
+    // Motor2.write(ThrottleValue);
+    // Motor3.write(ThrottleValue);
+    // Motor4.write(ThrottleValue);
 }
+

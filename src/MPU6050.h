@@ -4,6 +4,7 @@
 void gyro_init();
 void readGyro_signals();
 
-extern float RateRoll, RatePitch, RateYaw;
+extern float elapsedTime, RateRoll, RatePitch, RateYaw;
+extern float Total_angle_x, Total_angle_y;
 
 #endif 

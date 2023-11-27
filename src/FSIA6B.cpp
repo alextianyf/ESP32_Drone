@@ -13,19 +13,20 @@
 #define RC_LIMIT_MAX 2000
 #define RC_LIMIT_MIN 1000
 
-//#define RC_RECEIVE_DEBUG 1
+#define RC_RECEIVE_DEBUG 1
 
 
-uint16_t RC_VALUES[RC_NUM_CHANNELS];
-uint32_t RC_START[RC_NUM_CHANNELS];
-volatile uint16_t RC_SHARED[RC_NUM_CHANNELS];
+int16_t RC_VALUES[RC_NUM_CHANNELS];
+int32_t RC_START[RC_NUM_CHANNELS];
+volatile int16_t RC_SHARED[RC_NUM_CHANNELS];
+int16_t inputRoll, inputPitch, inputThrottle, inputYaw;
 
 
-void Read_Channel(uint8_t channel, uint8_t inputPin){
+void Read_Channel(int8_t channel, int8_t inputPin){
   if(digitalRead(inputPin) == HIGH){
     RC_START[channel] = micros();
   }else{
-    uint16_t rc_compare = (uint16_t)(micros() - RC_START[channel]);
+    int16_t rc_compare = (int16_t)(micros() - RC_START[channel]);
     if      (rc_compare< 1000){RC_SHARED[channel] = 1000;}
     else if (rc_compare > 2000){RC_SHARED[channel] = 2000;}
     else    {RC_SHARED[channel] = rc_compare;}
@@ -64,11 +65,15 @@ void Read_RC_Values(){
   noInterrupts();
   memcpy(RC_VALUES,(const void *)RC_SHARED, sizeof(RC_SHARED));
   interrupts();
+  inputRoll = RC_VALUES[RC_CH1];
+  inputPitch = RC_VALUES[RC_CH2];
+  inputThrottle = RC_VALUES[RC_CH3];
+  inputYaw = RC_VALUES[RC_CH4];
   #ifdef RC_RECEIVE_DEBUG
-    Serial.print(  RC_VALUES[RC_CH1]);  Serial.print(",");
-    Serial.print(  RC_VALUES[RC_CH2]);  Serial.print(",");
-    Serial.print(  RC_VALUES[RC_CH3]);  Serial.print(",");
-    Serial.println(RC_VALUES[RC_CH4]); 
+    Serial.print(inputRoll);  Serial.print(",");
+    Serial.print(inputPitch);  Serial.print(",");
+    Serial.print(inputThrottle);  Serial.print(",");
+    Serial.println(inputYaw); 
   #endif 
 }
 

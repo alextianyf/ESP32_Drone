@@ -12,8 +12,8 @@ void setup() {
 
 void loop() {
   Read_RC_Values();
-  Motor_Start();
-  readGyro_signals();
+  //readGyro_signals();
+  //Motor_Start();
   delay(50);
 }
 
