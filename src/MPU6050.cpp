@@ -8,8 +8,9 @@
 float elapsedTime, curTime, preTime;
 int gyro_error = 0;
 int16_t Gyr_rawX, Gyr_rawY, Gyr_rawZ;
+int16_t Gyr_X_Calibrated, Gyr_Y_Calibrated, Gyr_Z_Calibrated;
 float Gyro_angle_x, Gyro_angle_y;
-float Gyro_raw_error_x, Gyro_raw_error_y;
+float Gyro_raw_error_x, Gyro_raw_error_y, Gyro_raw_error_z;
 
 //Acc Variables
 int acc_error=0;                         //We use this variable to only calculate once the Acc data error
@@ -46,17 +47,20 @@ void gyro_init(){
             Wire.beginTransmission(MPU6050_ADDR);
             Wire.write(0x43);
             Wire.endTransmission(false);
-            Wire.requestFrom(0x68, 4);
+            Wire.requestFrom(0x68, 6);
 
             Gyr_rawX = Wire.read()<<8 | Wire.read();
             Gyr_rawY = Wire.read()<<8 | Wire.read();
+            Gyr_rawZ = Wire.read()<<8 | Wire.read();
 
             Gyro_raw_error_x = Gyro_raw_error_x + (Gyr_rawX/32.8);
             Gyro_raw_error_y = Gyro_raw_error_y + (Gyr_rawY/32.8);
+            Gyro_raw_error_z = Gyro_raw_error_z + (Gyr_rawZ/32.8);
 
             if(i == 199){
                 Gyro_raw_error_x = Gyro_raw_error_x/200;
                 Gyro_raw_error_y = Gyro_raw_error_y/200;
+                Gyro_raw_error_z = Gyro_raw_error_z/200;
                 gyro_error=1;
             }
         }
@@ -100,23 +104,25 @@ void readGyro_signals(){
     Wire.beginTransmission(0x68);            //begin, Send the slave adress (in this case 68) 
     Wire.write(0x43);                        //First adress of the Gyro data
     Wire.endTransmission(false);
-    Wire.requestFrom(0x68,4);           //We ask for just 4 registers
+    Wire.requestFrom(0x68,6);           //We ask for just 4 registers
         
     Gyr_rawX=Wire.read()<<8|Wire.read();     //Once again we shif and sum
     Gyr_rawY=Wire.read()<<8|Wire.read();
+    Gyr_rawZ=Wire.read()<<8|Wire.read();
     /*Now in order to obtain the gyro data in degrees/seconds we have to divide first
     the raw value by 32.8 because that's the value that the datasheet gives us for a 1000dps range*/
     /*---X---*/
-    Gyr_rawX = (Gyr_rawX/32.8) - Gyro_raw_error_x; 
+    Gyr_X_Calibrated = (Gyr_rawX/32.8) - Gyro_raw_error_x; 
     /*---Y---*/
-    Gyr_rawY = (Gyr_rawY/32.8) - Gyro_raw_error_y;
+    Gyr_Y_Calibrated = (Gyr_rawY/32.8) - Gyro_raw_error_y;
+    Gyr_Z_Calibrated = (Gyr_rawZ/32.8) - Gyro_raw_error_z;
     
     /*Now we integrate the raw value in degrees per seconds in order to obtain the angle
     * If you multiply degrees/seconds by seconds you obtain degrees */
-    /*---X---*/
-    Gyro_angle_x = Gyro_angle_x  + Gyr_rawX*elapsedTime;
-    /*---X---*/
-    Gyro_angle_y = Gyro_angle_y  + Gyr_rawY*elapsedTime;
+    // /*---X---*/
+    // Gyro_angle_x = Gyro_angle_x  + Gyr_rawX*elapsedTime;
+    // /*---X---*/
+    // Gyro_angle_y = Gyro_angle_y  + Gyr_rawY*elapsedTime;
 
     //////////////////////////////////////Acc read/////////////////////////////////////
 
@@ -148,13 +154,14 @@ void readGyro_signals(){
     /*---Y axis angle---*/
     Total_angle_y = 0.98 *(Total_angle_y + Gyro_angle_y) + 0.02*Acc_angle_y;
 
-    // Serial.print("GyroY raw: ");
-    // Serial.print(Gyr_rawY);
-    // Serial.print("   |   ");
-    // Serial.print("GyroY angle: ");
-    // Serial.println(Gyro_angle_y);
-    // Serial.print("Yº: ");
-    // Serial.print(Total_angle_y);
+    Serial.print("GyroX Roll: ");
+    Serial.print(Gyr_X_Calibrated);
+    Serial.print("   |   ");
+    Serial.print("GyroY Pitch: ");
+    Serial.print(Gyr_Y_Calibrated);
+    Serial.print("   |   ");
+    Serial.print("GyroZ Yaw: ");
+    Serial.println(Gyr_Z_Calibrated);
 
 }
 
