@@ -34,7 +34,7 @@ void gyro_init(){
     Wire.endTransmission(true);
 
     //Acc config
-    Wire.beginTransmission(MPU6050_ADDR);           //Start communication with the address found during search.
+    Wire.beginTransmission(MPU6050_ADDR);   //Start communication with the address found during search.
     Wire.write(0x1C);                       //We want to write to the ACCEL_CONFIG register
     Wire.write(0x10);                       //Set the register bits as 00010000 (+/- 8g full scale range)
     Wire.endTransmission(true);
@@ -100,9 +100,17 @@ void readGyro_signals(){
     preTime= curTime;
     curTime = millis();
     elapsedTime = (curTime - preTime) / 1000;
+    
+    //GYRO Config Setting
+    //DLPF(Digital Low Pass Filter) setting for both Gyro and Accel
+    //00000101 set Acce bandwidth 10Hz delya 13.8ms and Gyro bandwidth 10Hz and delay 13.4ms FS:1KHz
+    Wire.beginTransmission(MPU6050_ADDR);            
+    Wire.write(0x1A);  
+    Wire.write(0x05);                      
+    Wire.endTransmission(true);
 
-    Wire.beginTransmission(0x68);            //begin, Send the slave adress (in this case 68) 
-    Wire.write(0x43);                        //First adress of the Gyro data
+    Wire.beginTransmission(MPU6050_ADDR);  //begin, Send the slave adress (in this case 68) 
+    Wire.write(0x43);                      //First adress of the Gyro data
     Wire.endTransmission(false);
     Wire.requestFrom(0x68,6);           //We ask for just 4 registers
         
@@ -154,14 +162,9 @@ void readGyro_signals(){
     /*---Y axis angle---*/
     Total_angle_y = 0.98 *(Total_angle_y + Gyro_angle_y) + 0.02*Acc_angle_y;
 
-    Serial.print("GyroX Roll: ");
-    Serial.print(Gyr_X_Calibrated);
-    Serial.print("   |   ");
-    Serial.print("GyroY Pitch: ");
-    Serial.print(Gyr_Y_Calibrated);
-    Serial.print("   |   ");
-    Serial.print("GyroZ Yaw: ");
-    Serial.println(Gyr_Z_Calibrated);
+    Serial.print("GyroX Roll: "); Serial.print(Gyr_X_Calibrated); Serial.print("   |   ");
+    Serial.print("GyroY Pitch: "); Serial.print(Gyr_Y_Calibrated); Serial.print("   |   ");
+    Serial.print("GyroZ Yaw: "); Serial.println(Gyr_Z_Calibrated);
 
 }
 
