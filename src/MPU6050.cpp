@@ -4,6 +4,7 @@
 #include "Motor.h"
 
 #define MPU6050_ADDR 0x68
+//# define GYRO_DEBUG 1
 
 float elapsedTime, curTime, preTime;
 int gyro_error = 0;
@@ -161,10 +162,12 @@ void readGyro_signals(){
     Total_angle_x = 0.98 *(Total_angle_x + Gyro_angle_x) + 0.02*Acc_angle_x;
     /*---Y axis angle---*/
     Total_angle_y = 0.98 *(Total_angle_y + Gyro_angle_y) + 0.02*Acc_angle_y;
-
-    Serial.print("GyroX Roll: "); Serial.print(Gyr_X_Calibrated); Serial.print("   |   ");
-    Serial.print("GyroY Pitch: "); Serial.print(Gyr_Y_Calibrated); Serial.print("   |   ");
-    Serial.print("GyroZ Yaw: "); Serial.println(Gyr_Z_Calibrated);
+    
+    #ifdef GYRO_DEBUG
+        Serial.print("GyroX Roll: "); Serial.print(Gyr_X_Calibrated); Serial.print("   |   ");
+        Serial.print("GyroY Pitch: "); Serial.print(Gyr_Y_Calibrated); Serial.print("   |   ");
+        Serial.print("GyroZ Yaw: "); Serial.println(Gyr_Z_Calibrated);
+    #endif
 
 }
 
