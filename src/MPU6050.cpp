@@ -4,7 +4,7 @@
 #include "Motor.h"
 
 #define MPU6050_ADDR 0x68
-//# define GYRO_DEBUG 1
+#define GYRO_DEBUG 1
 
 float elapsedTime, curTime, preTime;
 int gyro_error = 0;
@@ -23,7 +23,7 @@ float Acc_angle_error_x, Acc_angle_error_y; //Here we store the initial Acc data
 float Total_angle_x, Total_angle_y;
 
 void gyro_init(){
-    Wire.begin();
+    //Wire.begin();
     Wire.beginTransmission(MPU6050_ADDR);
     Wire.write(0x6B);
     Wire.write(0x00);
@@ -32,6 +32,11 @@ void gyro_init(){
     Wire.beginTransmission(MPU6050_ADDR);
     Wire.write(0x1B);
     Wire.write(0x10);
+    Wire.endTransmission(true);
+
+    Wire.beginTransmission(MPU6050_ADDR);            
+    Wire.write(0x1A);  
+    Wire.write(0x05);                      
     Wire.endTransmission(true);
 
     //Acc config
@@ -105,10 +110,10 @@ void readGyro_signals(){
     //GYRO Config Setting
     //DLPF(Digital Low Pass Filter) setting for both Gyro and Accel
     //00000101 set Acce bandwidth 10Hz delya 13.8ms and Gyro bandwidth 10Hz and delay 13.4ms FS:1KHz
-    Wire.beginTransmission(MPU6050_ADDR);            
-    Wire.write(0x1A);  
-    Wire.write(0x05);                      
-    Wire.endTransmission(true);
+    // Wire.beginTransmission(MPU6050_ADDR);            
+    // Wire.write(0x1A);  
+    // Wire.write(0x05);                      
+    // Wire.endTransmission(true);
 
     Wire.beginTransmission(MPU6050_ADDR);  //begin, Send the slave adress (in this case 68) 
     Wire.write(0x43);                      //First adress of the Gyro data
